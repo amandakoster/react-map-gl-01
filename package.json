@@ -6,8 +6,16 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "browserify-css": "^0.15.0",
+    "d3-array": "^2.7.1",
+    "d3-request": "^1.0.6",
+    "d3-scale": "^3.2.2",
+    "dotenv": "^8.2.0",
+    "mapbox-gl": "^1.12.0",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-map-gl": "^5.2.8",
     "react-scripts": "3.4.3"
   },
   "scripts": {
@@ -30,5 +38,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "browserify-css": {
+    "autoInject": true,
+    "minify": true,
+    "rootDir": "."
   }
 }
