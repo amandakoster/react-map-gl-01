@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
-import ReactMapGL, { SVGOverlay, Marker } from "react-map-gl";
+import ReactMapGL, { Marker } from "react-map-gl";
 const token = process.env.REACT_APP_TOKEN;
 
 class App extends React.Component {
@@ -40,11 +40,6 @@ class App extends React.Component {
     this.setState({ viewport: newViewport });
   };
 
-  // const redraw = ({ project }) => {
-  //   const [cx, cy] = project([-122, 37]);
-  //   return <circle cx={cx} cy={cy} r={4} fill="green" />;
-  // };
-
   setUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       let setUserLocation = {
@@ -82,10 +77,10 @@ class App extends React.Component {
               latitude={this.state.userLocation.lat}
               longitude={this.state.userLocation.long}
             >
-              <div>I'm Here!!!</div>
+              <img src="location-pin.svg" alt="location pin icon" />
             </Marker>
           ) : (
-            <div>Empty</div>
+            <div />
           )}
         </ReactMapGL>
       </div>
