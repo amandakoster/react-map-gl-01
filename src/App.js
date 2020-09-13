@@ -4,33 +4,35 @@ import ReactMapGL, { SVGOverlay } from "react-map-gl";
 const token = process.env.REACT_APP_TOKEN;
 
 function App() {
-  const [viewport, setViewport] = useState({
-    width: 500,
-    height: 500,
-    latitude: 47.6062,
-    longitude: -122.3321,
-    zoom: 8
+  const [state, setState] = useState({
+    viewport: {
+      width: 500,
+      height: 500,
+      latitude: 47.6062,
+      longitude: -122.3321,
+      zoom: 8,
+    },
   });
 
   const _onViewportChange = (viewport) => {
     if (viewport.longitude > 0) {
       viewport.longitude = 0;
     }
-    setViewport(viewport);
+    setState({ viewport });
   };
 
   const _goToNYC = () => {
-    const newViewport = { ...viewport, longitude: -74.1, latitude: 40.7 };
-    setViewport(newViewport);
+    const newViewport = { ...state.viewport, longitude: -74.1, latitude: 40.7 };
+    setState({ viewport: newViewport });
   };
 
   const _goToSF = () => {
     const newViewport = {
-      ...viewport,
+      ...state.viewport,
       longitude: -122.4376,
       latitude: 37.7577,
     };
-    setViewport(newViewport);
+    setState({ viewport: newViewport });
   };
 
   const redraw = ({ project }) => {
@@ -39,22 +41,23 @@ function App() {
   };
 
   const _setUserLocation = () => {
-    navigator.geolocation.getCurrentPosition(position => {
+    navigator.geolocation.getCurrentPosition((position) => {
       let newLocalViewport = {
         width: 500,
         height: 500,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-        zoom: 12
-      }
-      setViewport(newLocalViewport);
-    })
-  }
+        zoom: 12,
+      };
+      setState({ viewport: newLocalViewport });
+    });
+  };
+  console.log("viewport", state);
 
   return (
     <div className="App">
       <ReactMapGL
-        {...viewport}
+        {...state.viewport}
         mapStyle="mapbox://styles/mapbox/outdoors-v11"
         onViewportChange={_onViewportChange}
         mapboxApiAccessToken={token}
@@ -63,7 +66,7 @@ function App() {
       </ReactMapGL>
       <button onClick={_goToSF}>SF</button>
       <button onClick={_goToNYC}>NYC</button>
-      <button onClick={_setUserLocation }>You are here!</button>
+      <button onClick={_setUserLocation}>You are here!</button>
     </div>
   );
 }
