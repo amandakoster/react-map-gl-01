@@ -11,7 +11,7 @@ function App() {
     longitude: -123.334102,
     zoom: 8,
   });
-  const [userLocation, setUserLocation] = useState(() => () => console.log("default ooops"));
+  const [userLocation, setUserLocation] = useState();
 
   // const _onViewportChange = (viewport) => {
   //   if (viewport.longitude > 0) {
