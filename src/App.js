@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, { Marker, Popup } from "react-map-gl";
 const token = process.env.REACT_APP_TOKEN;
 
 class App extends React.Component {
@@ -14,6 +14,7 @@ class App extends React.Component {
     },
     wifiHotSpots: [],
     userLocation: {},
+    selectedHotspot: null,
   };
 
   onViewportChange = (viewport) => {
@@ -42,6 +43,17 @@ class App extends React.Component {
       });
   };
 
+  setSelectedHotspot = (object) => {
+    console.log(object);
+    this.setState({
+      selectedHotspot: object,
+    });
+  };
+
+  closePopup = () => {
+    this.setState({ selectedHotspot: null });
+  };
+
   loadWifiMarkers = () => {
     return this.state.wifiHotSpots.map((spot) => {
       return (
@@ -50,11 +62,16 @@ class App extends React.Component {
           latitude={parseFloat(spot.latitude)}
           longitude={parseFloat(spot.longitude)}
         >
-          <img src="wifi-icon.svg" alt="wifi icon location" />
+          <img
+            onClick={() => this.setSelectedHotspot(spot)}
+            src="wifi-icon.svg"
+            alt="wifi icon location"
+          />
         </Marker>
       );
     });
   };
+
   setUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       let setUserLocation = {
@@ -96,6 +113,27 @@ class App extends React.Component {
             <div />
           )}
           {this.loadWifiMarkers()}
+          {this.state.selectedHotspot !== null ? (
+            <Popup
+              latitude={parseFloat(this.state.selectedHotspot.latitude)}
+              longitude={parseFloat(this.state.selectedHotspot.longitude)}
+              onClose={this.closePopup}
+            >
+              <p>
+                HotSpot Information
+                <br />
+                <b>Location: </b>
+                {this.state.selectedHotspot.location}
+                {", "}
+                {this.state.selectedHotspot.city}
+                <br />
+                <b>Boro Name: </b>
+                {this.state.selectedHotspot.boroname} <br />
+                <b>Type: </b>
+                {this.state.selectedHotspot.location_t}
+              </p>
+            </Popup>
+          ) : null}
         </ReactMapGL>
       </div>
     );
