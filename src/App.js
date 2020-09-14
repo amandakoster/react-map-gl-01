@@ -8,10 +8,11 @@ class App extends React.Component {
     viewport: {
       width: "100vw",
       height: "100vh",
-      latitude: 42.430472,
-      longitude: -123.334102,
-      zoom: 16,
+      longitude: -74.1,
+      latitude: 40.7,
+      zoom: 11,
     },
+    wifiHotSpots: [],
     userLocation: {},
   };
 
@@ -22,24 +23,38 @@ class App extends React.Component {
     this.setState({ viewport });
   };
 
-  goToNYC = () => {
-    const newViewport = {
-      ...this.state.viewport,
-      longitude: -74.1,
-      latitude: 40.7,
-    };
-    this.setState({ viewport: newViewport });
+  componentDidMount() {
+    this.fetchAPI();
+  }
+
+  filterFreeWifi = (hotspots) => {
+    return hotspots.filter((spot) => {
+      return spot.type === "Free";
+    });
   };
 
-  goToSF = () => {
-    const newViewport = {
-      ...this.state.viewport,
-      longitude: -122.4376,
-      latitude: 37.7577,
-    };
-    this.setState({ viewport: newViewport });
+  fetchAPI = () => {
+    fetch("https://data.cityofnewyork.us/resource/yjub-udmw.json")
+      .then((res) => res.json())
+      .then((hotspots) => {
+        let freeWifi = this.filterFreeWifi(hotspots);
+        this.setState({ wifiHotSpots: freeWifi });
+      });
   };
 
+  loadWifiMarkers = () => {
+    return this.state.wifiHotSpots.map((spot) => {
+      return (
+        <Marker
+          key={spot.objectid}
+          latitude={parseFloat(spot.latitude)}
+          longitude={parseFloat(spot.longitude)}
+        >
+          <img src="wifi-icon.svg" alt="wifi icon location" />
+        </Marker>
+      );
+    });
+  };
   setUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       let setUserLocation = {
@@ -63,9 +78,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <button onClick={this.goToSF}>SF</button>
-        <button onClick={this.goToNYC}>NYC</button>
-        <button onClick={this.setUserLocation}>You are here!</button>
+        <button onClick={this.setUserLocation}>Go to your location</button>
         <ReactMapGL
           {...this.state.viewport}
           mapStyle="mapbox://styles/mapbox/outdoors-v11"
@@ -82,6 +95,7 @@ class App extends React.Component {
           ) : (
             <div />
           )}
+          {this.loadWifiMarkers()}
         </ReactMapGL>
       </div>
     );
