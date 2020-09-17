@@ -95,9 +95,10 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <button onClick={this.setUserLocation}>Go to your location</button>
+      <p>Simple react-map-gl. <br/> This map uses Ubers react-map-gl library to: <br/> 1) go to users location by getting the navigator.geolocation.getCurrentPosition: <button onClick={this.setUserLocation}>Go to your location</button> <br/> 2) show the location of free hotspots in nyc.</p>
+        
         <ReactMapGL
-          {...this.state.viewport}
+          {...this.state.viewport}r
           mapStyle="mapbox://styles/mapbox/outdoors-v11"
           onViewportChange={this.onViewportChange}
           mapboxApiAccessToken={token}
