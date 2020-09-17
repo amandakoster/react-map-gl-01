@@ -92,13 +92,34 @@ class App extends React.Component {
     });
   };
 
+  goToNYC = () => {
+    const newViewport = {
+      ...this.state.viewport,
+      longitude: -74.1,
+      latitude: 40.7,
+    };
+    this.setState({ viewport: newViewport });
+  };
+
   render() {
     return (
       <div className="App">
-      <p>Simple react-map-gl. <br/> This map uses Ubers react-map-gl library to: <br/> 1) go to users location by getting the navigator.geolocation.getCurrentPosition: <button onClick={this.setUserLocation}>Go to your location</button> <br/> 2) show the location of free hotspots in nyc.</p>
-        
+        <p>
+          Simple react-map-gl. <br />
+          This map uses Ubers react-map-gl library to: <br />
+          1) go to users location by getting the
+          navigator.geolocation.getCurrentPosition:{" "}
+          <button onClick={this.setUserLocation}>
+            Go to your location
+          </button>{" "}
+          <br />
+          2) show the location of free hotspots in nyc:{" "}
+          <button onClick={this.goToNYC}>Go to NYC</button>
+        </p>
+
         <ReactMapGL
-          {...this.state.viewport}r
+          {...this.state.viewport}
+          r
           mapStyle="mapbox://styles/mapbox/outdoors-v11"
           onViewportChange={this.onViewportChange}
           mapboxApiAccessToken={token}
